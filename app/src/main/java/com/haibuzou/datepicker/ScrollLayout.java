@@ -30,6 +30,7 @@ public class ScrollLayout extends FrameLayout implements MonthView.OnLineCountCh
     private int orignalY;
     //滑动的过程中记录顶部坐标
     private int layoutTop;
+    private int dragRang;
 
 
     public ScrollLayout(Context context) {
@@ -45,7 +46,7 @@ public class ScrollLayout extends FrameLayout implements MonthView.OnLineCountCh
         viewDragHelper = ViewDragHelper.create(this, new ViewDragHelper.Callback() {
             @Override
             public boolean tryCaptureView(View child, int pointerId) {
-                return child == mainLayout;
+                return true;
             }
 
             @Override
@@ -78,7 +79,7 @@ public class ScrollLayout extends FrameLayout implements MonthView.OnLineCountCh
 
             @Override
             public int getViewVerticalDragRange(View child) {
-                return getHeight()-monthView.getHeight();
+                return dragRang;
             }
         });
     }
@@ -122,6 +123,13 @@ public class ScrollLayout extends FrameLayout implements MonthView.OnLineCountCh
     }
 
     @Override
+    public void computeScroll() {
+        if(viewDragHelper.continueSettling(true)){
+            postInvalidate();
+        }
+    }
+
+    @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
         mainLayout = (RelativeLayout)findViewById(R.id.main_layout);
@@ -139,6 +147,7 @@ public class ScrollLayout extends FrameLayout implements MonthView.OnLineCountCh
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         mainLayout.layout(0,layoutTop,mainLayout.getMeasuredWidth(),mainLayout.getMeasuredHeight());
+        dragRang = getHeight() - monthView.getMeasuredHeight();
     }
 
     @Override
@@ -156,7 +165,7 @@ public class ScrollLayout extends FrameLayout implements MonthView.OnLineCountCh
     protected void measureChild(View child, int parentWidthMeasureSpec, int parentHeightMeasureSpec) {
         ViewGroup.LayoutParams lp = child.getLayoutParams();
         int childWidthMeasureSpec = getChildMeasureSpec(parentWidthMeasureSpec,getPaddingLeft()+getPaddingRight(),lp.width);
-        int childHeightMeasureSpec = getChildMeasureSpec(parentHeightMeasureSpec,getPaddingTop()+getPaddingBottom(),lp.height);
+        int childHeightMeasureSpec = MeasureSpec.makeMeasureSpec(0,MeasureSpec.UNSPECIFIED);
         child.measure(childWidthMeasureSpec,childHeightMeasureSpec);
     }
 
@@ -164,7 +173,7 @@ public class ScrollLayout extends FrameLayout implements MonthView.OnLineCountCh
     protected void measureChildWithMargins(View child, int parentWidthMeasureSpec, int widthUsed, int parentHeightMeasureSpec, int heightUsed) {
         MarginLayoutParams lp = (MarginLayoutParams) child.getLayoutParams();
         int childWidthMeasureSpec = getChildMeasureSpec(parentWidthMeasureSpec,lp.leftMargin+lp.rightMargin+getPaddingLeft()+getPaddingRight(),lp.width);
-        int childHeightMeasureSpec = getChildMeasureSpec(parentHeightMeasureSpec,lp.topMargin+lp.bottomMargin+getPaddingTop()+getPaddingBottom(),lp.height);
+        int childHeightMeasureSpec = MeasureSpec.makeMeasureSpec(lp.topMargin+lp.bottomMargin,MeasureSpec.UNSPECIFIED);
         child.measure(childWidthMeasureSpec,childHeightMeasureSpec);
     }
 }
