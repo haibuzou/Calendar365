@@ -55,9 +55,9 @@ public class ScrollLayout extends FrameLayout implements MonthView.OnLineCountCh
                     return orignalY;
                 }else{
                     if(contentLayout.getBottom()<=getHeight()){
-                        return Math.min(top,-monthView.getHeight()*(lineCount-1)/lineCount);
+                        return Math.max(top,-monthView.getHeight()*(lineCount-1)/lineCount);
                     }else{
-                        return Math.min(top,getHeight()-contentLayout.getMeasuredHeight());
+                        return Math.max(top,getHeight()-contentLayout.getMeasuredHeight());
                     }
                 }
             }
@@ -65,9 +65,9 @@ public class ScrollLayout extends FrameLayout implements MonthView.OnLineCountCh
             @Override
             public void onViewPositionChanged(View changedView, int left, int top, int dx, int dy) {
                     layoutTop = top;
-                    if(top == -monthView.getHeight()*line/lineCount&&dy<0){
+                    if(top <= -monthView.getHeight()*line/lineCount&&dy<0){
                         weekView.setVisibility(View.VISIBLE);
-                    }else if(top==-monthView.getHeight()*line/lineCount&&dy>0){
+                    }else if(top>=-monthView.getHeight()*line/lineCount&&dy>0){
                         weekView.setVisibility(View.INVISIBLE);
                     }
             }
@@ -79,7 +79,7 @@ public class ScrollLayout extends FrameLayout implements MonthView.OnLineCountCh
 
             @Override
             public int getViewVerticalDragRange(View child) {
-                return dragRang;
+                return monthView.getHeight();
             }
         });
     }
@@ -87,6 +87,7 @@ public class ScrollLayout extends FrameLayout implements MonthView.OnLineCountCh
     @Override
     public void onLineChange(int line) {
         this.line = line;
+        weekView.setLine(line);
     }
 
     @Override
@@ -105,12 +106,12 @@ public class ScrollLayout extends FrameLayout implements MonthView.OnLineCountCh
 
     @Override
     public void onMonthDateClick(int x, int y) {
-        weekView.changeChooseDate(x,y);
+        weekView.changeChooseDate(x,y-(monthView.getHeight()*(line-1)/lineCount));
     }
 
     @Override
     public void onWeekDateClick(int x, int y) {
-        monthView.changeChooseDate(x,y);
+        monthView.changeChooseDate(x,y+(monthView.getHeight()*(line-1)/lineCount));
     }
 
     @Override
@@ -147,7 +148,6 @@ public class ScrollLayout extends FrameLayout implements MonthView.OnLineCountCh
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         mainLayout.layout(0,layoutTop,mainLayout.getMeasuredWidth(),mainLayout.getMeasuredHeight());
-        dragRang = getHeight() - monthView.getMeasuredHeight();
     }
 
     @Override
