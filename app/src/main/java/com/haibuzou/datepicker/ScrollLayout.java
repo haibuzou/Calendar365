@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
 import com.haibuzou.datepicker.calendar.views.MonthView;
 import com.haibuzou.datepicker.calendar.views.WeekView;
@@ -21,7 +20,7 @@ public class ScrollLayout extends FrameLayout implements MonthView.OnLineCountCh
     private ViewDragHelper viewDragHelper;
     private MonthView monthView;
     private WeekView weekView;
-    private RelativeLayout mainLayout;
+    private LinearLayout mainLayout;
     private LinearLayout contentLayout;
     //记录month calendar 行数和选择的哪一行的数字的变化
     private int line;
@@ -46,7 +45,7 @@ public class ScrollLayout extends FrameLayout implements MonthView.OnLineCountCh
         viewDragHelper = ViewDragHelper.create(this, new ViewDragHelper.Callback() {
             @Override
             public boolean tryCaptureView(View child, int pointerId) {
-                return true;
+                return child== mainLayout;
             }
 
             @Override
@@ -106,12 +105,12 @@ public class ScrollLayout extends FrameLayout implements MonthView.OnLineCountCh
 
     @Override
     public void onMonthDateClick(int x, int y) {
-        weekView.changeChooseDate(x,y-(monthView.getHeight()*(line-1)/lineCount));
+        weekView.changeChooseDate(x,y-(monthView.getHeight()*(line)/lineCount));
     }
 
     @Override
     public void onWeekDateClick(int x, int y) {
-        monthView.changeChooseDate(x,y+(monthView.getHeight()*(line-1)/lineCount));
+        monthView.changeChooseDate(x,y+(monthView.getHeight()*(line)/lineCount));
     }
 
     @Override
@@ -133,7 +132,7 @@ public class ScrollLayout extends FrameLayout implements MonthView.OnLineCountCh
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        mainLayout = (RelativeLayout)findViewById(R.id.main_layout);
+        mainLayout = (LinearLayout)findViewById(R.id.main_layout);
         monthView = (MonthView) findViewById(R.id.month_calendar);
         monthView.setOnLineChooseListener(this);
         monthView.setOnLineCountChangeListener(this);
@@ -147,6 +146,7 @@ public class ScrollLayout extends FrameLayout implements MonthView.OnLineCountCh
 
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        weekView.layout(0,0,weekView.getMeasuredWidth(),weekView.getMeasuredHeight());
         mainLayout.layout(0,layoutTop,mainLayout.getMeasuredWidth(),mainLayout.getMeasuredHeight());
     }
 
