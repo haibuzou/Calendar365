@@ -83,7 +83,7 @@ public class WeekView extends View {
 
 	private float sizeTextGregorian, sizeTextFestival;
 	private float offsetYFestival1, offsetYFestival2;
-	private int num = 0;
+	private int num = 2;
 
 	private boolean isNewEvent, isFestivalDisplay = true,
 			isHolidayDisplay = true, isTodayDisplay = true,

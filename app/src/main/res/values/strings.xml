@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">DatePicker</string>
+    <string name="monday">一</string>
+    <string name="tuseday">二</string>
+    <string name="wednesday">三</string>
+    <string name="thursday">四</string>
+    <string name="friday">五</string>
+    <string name="saturday">六</string>
+    <string name="sunday">日</string>
+    <string name="hot_news">热点事件</string>
+    <string name="kou_hao">标新 ，立异</string>
+    <string name="advertisement">新一代梅赛德斯</string>
 </resources>

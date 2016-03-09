@@ -137,6 +137,7 @@ public class ScrollLayout extends FrameLayout implements MonthView.OnLineCountCh
         monthView.setOnLineChooseListener(this);
         monthView.setOnLineCountChangeListener(this);
         monthView.setOnMonthDateClickListener(this);
+        monthView.setOnMonthViewChangeListener(this);
         weekView = (WeekView)findViewById(R.id.week_calendar);
         weekView.setOnWeekViewChangeListener(this);
         weekView.setOnWeekClickListener(this);

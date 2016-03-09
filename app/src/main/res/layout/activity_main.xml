@@ -1,10 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:orientation="vertical"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/colorWhite"
+    android:orientation="vertical">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:background="@color/colorPrimaryDark"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize">
 
+    </android.support.v7.widget.Toolbar>
+
+    <include layout="@layout/top_week_title" />
 
     <com.haibuzou.datepicker.ScrollLayout
         android:layout_width="match_parent"
@@ -12,9 +21,10 @@
 
         <LinearLayout
             android:id="@+id/main_layout"
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
             <com.haibuzou.datepicker.calendar.views.MonthView
                 android:id="@+id/month_calendar"
                 android:layout_width="match_parent"
@@ -35,7 +45,7 @@
             android:id="@+id/week_calendar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="invisible"/>
+            android:visibility="invisible" />
 
     </com.haibuzou.datepicker.ScrollLayout>
 
