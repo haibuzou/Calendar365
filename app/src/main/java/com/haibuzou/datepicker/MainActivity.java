@@ -4,7 +4,9 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.haibuzou.datepicker.calendar.cons.DPMode;
@@ -12,7 +14,9 @@ import com.haibuzou.datepicker.calendar.views.MonthView;
 import com.haibuzou.datepicker.calendar.views.WeekView;
 import com.haibuzou.datepicker.view.ContentItemViewAbs;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity implements MonthView.OnDateChangeListener, MonthView.OnDatePickedListener {
 
@@ -20,6 +24,7 @@ public class MainActivity extends AppCompatActivity implements MonthView.OnDateC
     private WeekView weekView;
     private Toolbar toolbar;
     private LinearLayout contentLayout;
+    private TextView weekTxt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements MonthView.OnDateC
         monthView = (MonthView) findViewById(R.id.month_calendar);
         weekView = (WeekView) findViewById(R.id.week_calendar);
         contentLayout = (LinearLayout) findViewById(R.id.content_layout);
+        weekTxt = (TextView)findViewById(R.id.week_text);
 
         monthView.setDPMode(DPMode.SINGLE);
         monthView.setDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1);
@@ -62,6 +68,15 @@ public class MainActivity extends AppCompatActivity implements MonthView.OnDateC
 
     @Override
     public void onDatePicked(String date) {
-        Toast.makeText(this, "" + date, Toast.LENGTH_LONG).show();
+        try {
+            SimpleDateFormat format1 = new SimpleDateFormat("yyyy.MM.dd");
+            SimpleDateFormat format2 = new SimpleDateFormat("EEEE");
+            Date choosedate = format1.parse(date);
+            weekTxt.setText(format2.format(choosedate));
+            weekTxt.setVisibility(View.VISIBLE);
+            Toast.makeText(this, "" + date, Toast.LENGTH_LONG).show();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }
