@@ -73,7 +73,7 @@ public class ScrollLayout extends FrameLayout implements MonthView.OnLineCountCh
 
             @Override
             public void onViewReleased(View releasedChild, float xvel, float yvel) {
-                if(yvel>0){
+                if(yvel>=0){
                     viewDragHelper.settleCapturedViewAt(0,orignalY);
                     invalidate();
                 }else{
