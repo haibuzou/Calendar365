@@ -73,7 +73,13 @@ public class ScrollLayout extends FrameLayout implements MonthView.OnLineCountCh
 
             @Override
             public void onViewReleased(View releasedChild, float xvel, float yvel) {
-                super.onViewReleased(releasedChild, xvel, yvel);
+                if(yvel>0){
+                    viewDragHelper.settleCapturedViewAt(0,orignalY);
+                    invalidate();
+                }else{
+                    viewDragHelper.settleCapturedViewAt(0,-monthView.getHeight()*(lineCount-1)/lineCount);
+                    invalidate();
+                }
             }
 
             @Override
