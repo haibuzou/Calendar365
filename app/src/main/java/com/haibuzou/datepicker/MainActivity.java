@@ -80,6 +80,9 @@ public class MainActivity extends AppCompatActivity implements MonthView.OnDateC
             } else {
                 weekTxt.setVisibility(View.VISIBLE);
             }
+            contentLayout.removeAllViews();
+            ContentItemViewAbs cia = new ContentItemViewAbs(this);
+            contentLayout.addView(cia);
             Toast.makeText(this, "" + date, Toast.LENGTH_LONG).show();
         } catch (Exception e) {
             e.printStackTrace();

@@ -170,8 +170,23 @@ public class ScrollLayout extends FrameLayout implements MonthView.OnLineCountCh
     }
 
     @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        int widthMode = MeasureSpec.getMode(widthMeasureSpec);
+        int widthSize = MeasureSpec.getSize(widthMeasureSpec);
+        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
+        int heightSize = MeasureSpec.getSize(heightMeasureSpec);
+        //计算所有childview的宽高
+        measureChildren(widthMeasureSpec,heightMeasureSpec);
+        //计算warp_content的时候的高度
+        int wrapHeight = 0;
+        int count = getChildCount();
+        for(int i = 0; i < count; i++){
+            View child = getChildAt(i);
+            int childHeight = child.getMeasuredHeight();
+            wrapHeight += childHeight;
+        }
+        setMeasuredDimension(widthSize,heightMode==MeasureSpec.EXACTLY?heightSize:wrapHeight);
+
     }
 
     @Override
