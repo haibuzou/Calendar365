@@ -8,14 +8,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 
 import com.haibuzou.datepicker.calendar.views.MonthView;
 import com.haibuzou.datepicker.calendar.views.WeekView;
 
 
 public class ScrollLayout extends FrameLayout implements MonthView.OnLineCountChangeListener,
-        MonthView.OnLineChooseListener,MonthView.OnMonthViewChangeListener,
-        WeekView.OnWeekViewChangeListener,WeekView.OnWeekDateClick,MonthView.OnMonthDateClick{
+        MonthView.OnLineChooseListener, MonthView.OnMonthViewChangeListener,
+        WeekView.OnWeekViewChangeListener, WeekView.OnWeekDateClick, MonthView.OnMonthDateClick {
 
     private ViewDragHelper viewDragHelper;
     private MonthView monthView;
@@ -33,11 +34,11 @@ public class ScrollLayout extends FrameLayout implements MonthView.OnLineCountCh
 
 
     public ScrollLayout(Context context) {
-        this(context,null);
+        this(context, null);
     }
 
     public ScrollLayout(Context context, AttributeSet attrs) {
-        this(context, attrs,0);
+        this(context, attrs, 0);
     }
 
     public ScrollLayout(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -45,39 +46,39 @@ public class ScrollLayout extends FrameLayout implements MonthView.OnLineCountCh
         viewDragHelper = ViewDragHelper.create(this, new ViewDragHelper.Callback() {
             @Override
             public boolean tryCaptureView(View child, int pointerId) {
-                return child== mainLayout;
+                return child == mainLayout;
             }
 
             @Override
             public int clampViewPositionVertical(View child, int top, int dy) {
-                if(top >= orignalY){
+                if (top >= orignalY) {
                     return orignalY;
-                }else{
-                    if(contentLayout.getBottom()<=getHeight()){
-                        return Math.max(top,-monthView.getHeight()*(lineCount-1)/lineCount);
-                    }else{
-                        return Math.max(top,getHeight()-contentLayout.getMeasuredHeight());
+                } else {
+                    if (mainLayout.getBottom() <= getHeight()) {
+                        return Math.max(top, -monthView.getHeight() * (lineCount - 1) / lineCount);
+                    } else {
+                        return Math.max(top, getHeight() - mainLayout.getMeasuredHeight());
                     }
                 }
             }
 
             @Override
             public void onViewPositionChanged(View changedView, int left, int top, int dx, int dy) {
-                    layoutTop = top;
-                    if(top <= -monthView.getHeight()*line/lineCount&&dy<0){
-                        weekView.setVisibility(View.VISIBLE);
-                    }else if(top>=-monthView.getHeight()*line/lineCount&&dy>0){
-                        weekView.setVisibility(View.INVISIBLE);
-                    }
+                layoutTop = top;
+                if (top <= -monthView.getHeight() * line / lineCount && dy < 0) {
+                    weekView.setVisibility(View.VISIBLE);
+                } else if (top >= -monthView.getHeight() * line / lineCount && dy > 0) {
+                    weekView.setVisibility(View.INVISIBLE);
+                }
             }
 
             @Override
             public void onViewReleased(View releasedChild, float xvel, float yvel) {
-                if(yvel>=0){
-                    viewDragHelper.settleCapturedViewAt(0,orignalY);
+                if (yvel >= 0) {
+                    viewDragHelper.settleCapturedViewAt(0, orignalY);
                     invalidate();
-                }else{
-                    viewDragHelper.settleCapturedViewAt(0,-monthView.getHeight()*(lineCount-1)/lineCount);
+                } else {
+                    viewDragHelper.settleCapturedViewAt(0, -monthView.getHeight() * (lineCount - 1) / lineCount);
                     invalidate();
                 }
             }
@@ -102,35 +103,35 @@ public class ScrollLayout extends FrameLayout implements MonthView.OnLineCountCh
 
     @Override
     public void onMonthViewChange(boolean isforward) {
-        if(isforward){
+        if (isforward) {
             weekView.moveForwad();
-        }else{
+        } else {
             weekView.moveBack();
         }
     }
 
     @Override
     public void onMonthDateClick(int x, int y) {
-        weekView.changeChooseDate(x,y-(monthView.getHeight()*(line)/lineCount));
+        weekView.changeChooseDate(x, y - (monthView.getHeight() * (line) / lineCount));
     }
 
     @Override
     public void onWeekDateClick(int x, int y) {
-        monthView.changeChooseDate(x,y+(monthView.getHeight()*(line)/lineCount));
+        monthView.changeChooseDate(x, y + (monthView.getHeight() * (line) / lineCount));
     }
 
     @Override
     public void onWeekViewChange(boolean isForward) {
-        if(isForward){
+        if (isForward) {
             monthView.moveForwad();
-        }else{
+        } else {
             monthView.moveBack();
         }
     }
 
     @Override
     public void computeScroll() {
-        if(viewDragHelper.continueSettling(true)){
+        if (viewDragHelper.continueSettling(true)) {
             postInvalidate();
         }
     }
@@ -138,13 +139,13 @@ public class ScrollLayout extends FrameLayout implements MonthView.OnLineCountCh
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        mainLayout = (LinearLayout)findViewById(R.id.main_layout);
+        mainLayout = (LinearLayout) findViewById(R.id.main_layout);
         monthView = (MonthView) findViewById(R.id.month_calendar);
         monthView.setOnLineChooseListener(this);
         monthView.setOnLineCountChangeListener(this);
         monthView.setOnMonthDateClickListener(this);
         monthView.setOnMonthViewChangeListener(this);
-        weekView = (WeekView)findViewById(R.id.week_calendar);
+        weekView = (WeekView) findViewById(R.id.week_calendar);
         weekView.setOnWeekViewChangeListener(this);
         weekView.setOnWeekClickListener(this);
         contentLayout = (LinearLayout) findViewById(R.id.content_layout);
@@ -153,8 +154,8 @@ public class ScrollLayout extends FrameLayout implements MonthView.OnLineCountCh
 
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        weekView.layout(0,0,weekView.getMeasuredWidth(),weekView.getMeasuredHeight());
-        mainLayout.layout(0,layoutTop,mainLayout.getMeasuredWidth(),mainLayout.getMeasuredHeight());
+        weekView.layout(0, 0, weekView.getMeasuredWidth(), weekView.getMeasuredHeight());
+        mainLayout.layout(0, layoutTop, mainLayout.getMeasuredWidth(), mainLayout.getMeasuredHeight());
     }
 
     @Override
@@ -169,18 +170,37 @@ public class ScrollLayout extends FrameLayout implements MonthView.OnLineCountCh
     }
 
     @Override
-    protected void measureChild(View child, int parentWidthMeasureSpec, int parentHeightMeasureSpec) {
-        ViewGroup.LayoutParams lp = child.getLayoutParams();
-        int childWidthMeasureSpec = getChildMeasureSpec(parentWidthMeasureSpec,getPaddingLeft()+getPaddingRight(),lp.width);
-        int childHeightMeasureSpec = MeasureSpec.makeMeasureSpec(0,MeasureSpec.UNSPECIFIED);
-        child.measure(childWidthMeasureSpec,childHeightMeasureSpec);
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
     }
 
     @Override
-    protected void measureChildWithMargins(View child, int parentWidthMeasureSpec, int widthUsed, int parentHeightMeasureSpec, int heightUsed) {
-        MarginLayoutParams lp = (MarginLayoutParams) child.getLayoutParams();
-        int childWidthMeasureSpec = getChildMeasureSpec(parentWidthMeasureSpec,lp.leftMargin+lp.rightMargin+getPaddingLeft()+getPaddingRight(),lp.width);
-        int childHeightMeasureSpec = MeasureSpec.makeMeasureSpec(lp.topMargin+lp.bottomMargin,MeasureSpec.UNSPECIFIED);
-        child.measure(childWidthMeasureSpec,childHeightMeasureSpec);
+    protected void measureChild(View child, int parentWidthMeasureSpec, int parentHeightMeasureSpec) {
+        ViewGroup.LayoutParams lp = child.getLayoutParams();
+
+        int childWidthMeasureSpec;
+        int childHeightMeasureSpec;
+
+        childWidthMeasureSpec = getChildMeasureSpec(parentWidthMeasureSpec,
+                getPaddingLeft() + getPaddingRight(), lp.width);
+
+        childHeightMeasureSpec = MeasureSpec.makeMeasureSpec(0,
+                MeasureSpec.UNSPECIFIED);
+
+        child.measure(childWidthMeasureSpec, childHeightMeasureSpec);
     }
+
+    @Override
+    protected void measureChildWithMargins(View child, int parentWidthMeasureSpec, int widthUsed,
+                                           int parentHeightMeasureSpec, int heightUsed) {
+        final MarginLayoutParams lp = (MarginLayoutParams) child.getLayoutParams();
+
+        final int childWidthMeasureSpec = getChildMeasureSpec(
+                parentWidthMeasureSpec, lp.leftMargin + lp.rightMargin + widthUsed, lp.width);
+        final int childHeightMeasureSpec = MeasureSpec.makeMeasureSpec(
+                lp.topMargin + lp.bottomMargin, MeasureSpec.UNSPECIFIED);
+
+        child.measure(childWidthMeasureSpec, childHeightMeasureSpec);
+    }
+
 }

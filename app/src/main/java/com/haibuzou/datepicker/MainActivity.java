@@ -25,13 +25,14 @@ public class MainActivity extends AppCompatActivity implements MonthView.OnDateC
     private Toolbar toolbar;
     private LinearLayout contentLayout;
     private TextView weekTxt;
+    private Calendar now;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        Calendar now = Calendar.getInstance();
+        now = Calendar.getInstance();
         toolbar.setTitle(now.get(Calendar.YEAR) + "." + (now.get(Calendar.MONTH) + 1));
         setSupportActionBar(toolbar);
 
@@ -39,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements MonthView.OnDateC
         monthView = (MonthView) findViewById(R.id.month_calendar);
         weekView = (WeekView) findViewById(R.id.week_calendar);
         contentLayout = (LinearLayout) findViewById(R.id.content_layout);
-        weekTxt = (TextView)findViewById(R.id.week_text);
+        weekTxt = (TextView) findViewById(R.id.week_text);
 
         monthView.setDPMode(DPMode.SINGLE);
         monthView.setDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1);
@@ -53,9 +54,10 @@ public class MainActivity extends AppCompatActivity implements MonthView.OnDateC
         weekView.setFestivalDisplay(true);
         weekView.setTodayDisplay(true);
         weekView.setOnDatePickedListener(this);
-
-        ContentItemViewAbs cia = new ContentItemViewAbs(this);
-        contentLayout.addView(cia);
+        for(int i = 0; i< 3; i++) {
+            ContentItemViewAbs cia = new ContentItemViewAbs(this);
+            contentLayout.addView(cia);
+        }
 
     }
 
@@ -73,9 +75,13 @@ public class MainActivity extends AppCompatActivity implements MonthView.OnDateC
             SimpleDateFormat format2 = new SimpleDateFormat("EEEE");
             Date choosedate = format1.parse(date);
             weekTxt.setText(format2.format(choosedate));
-            weekTxt.setVisibility(View.VISIBLE);
+            if (date.equals(now.get(Calendar.YEAR) + "." + (now.get(Calendar.MONTH) + 1) + "." + now.get(Calendar.DAY_OF_MONTH))) {
+                weekTxt.setVisibility(View.INVISIBLE);
+            } else {
+                weekTxt.setVisibility(View.VISIBLE);
+            }
             Toast.makeText(this, "" + date, Toast.LENGTH_LONG).show();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
