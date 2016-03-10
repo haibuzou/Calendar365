@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 
 import com.haibuzou.datepicker.calendar.views.MonthView;
 import com.haibuzou.datepicker.calendar.views.WeekView;
@@ -54,10 +53,10 @@ public class ScrollLayout extends FrameLayout implements MonthView.OnLineCountCh
                 if (top >= orignalY) {
                     return orignalY;
                 } else {
-                    if (mainLayout.getBottom() <= getHeight()) {
+                    if (contentLayout.getBottom() <= getHeight()) {
                         return Math.max(top, -monthView.getHeight() * (lineCount - 1) / lineCount);
                     } else {
-                        return Math.max(top, getHeight() - mainLayout.getMeasuredHeight());
+                        return Math.max(top, getHeight() - contentLayout.getMeasuredHeight());
                     }
                 }
             }
