@@ -142,6 +142,7 @@ public class ScrollLayout extends FrameLayout implements MonthView.OnLineCountCh
         }
     }
 
+
     @Override
     public void computeScroll() {
         if (viewDragHelper.continueSettling(true)) {

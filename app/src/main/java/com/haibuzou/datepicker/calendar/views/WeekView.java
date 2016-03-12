@@ -89,7 +89,6 @@ public class WeekView extends View {
 	private boolean isNewEvent, isFestivalDisplay = true,
 			isHolidayDisplay = true, isTodayDisplay = true,
 			isDeferredDisplay = true;
-	boolean isForward = false;
 
 	private Map<String, BGCircle> cirApr = new HashMap<>();
 	private Map<String, BGCircle> cirDpr = new HashMap<>();
