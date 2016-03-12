@@ -83,7 +83,7 @@ public class WeekView extends View {
 
 	private float sizeTextGregorian, sizeTextFestival;
 	private float offsetYFestival1, offsetYFestival2;
-	private int num = 2;
+	private int num = 5;
 
 	private boolean isNewEvent, isFestivalDisplay = true,
 			isHolidayDisplay = true, isTodayDisplay = true,
@@ -223,7 +223,7 @@ public class WeekView extends View {
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 		int measureWidth = MeasureSpec.getSize(widthMeasureSpec);
-		setMeasuredDimension(measureWidth, (int) (measureWidth * 6F / 8F) / 5);
+		setMeasuredDimension(measureWidth, (int) (measureWidth * 6F / 7F) / num);
 	}
 	
 	  public void moveForwad(){
