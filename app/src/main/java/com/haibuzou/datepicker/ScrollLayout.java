@@ -3,6 +3,7 @@ package com.haibuzou.datepicker;
 import android.content.Context;
 import android.support.v4.widget.ViewDragHelper;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.LinearLayout;
 
 import com.haibuzou.datepicker.calendar.views.MonthView;
 import com.haibuzou.datepicker.calendar.views.WeekView;
+import com.haibuzou.datepicker.view.MyTextView;
 
 
 public class ScrollLayout extends FrameLayout implements MonthView.OnLineCountChangeListener,
@@ -30,6 +32,8 @@ public class ScrollLayout extends FrameLayout implements MonthView.OnLineCountCh
     //滑动的过程中记录顶部坐标
     private int layoutTop;
     private int dragRang;
+    private MyTextView weekTxt;
+    private int marginTop;
 
 
     public ScrollLayout(Context context) {
@@ -42,6 +46,7 @@ public class ScrollLayout extends FrameLayout implements MonthView.OnLineCountCh
 
     public ScrollLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        marginTop = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,13,getResources().getDisplayMetrics());
         viewDragHelper = ViewDragHelper.create(this, new ViewDragHelper.Callback() {
             @Override
             public boolean tryCaptureView(View child, int pointerId) {
@@ -68,6 +73,12 @@ public class ScrollLayout extends FrameLayout implements MonthView.OnLineCountCh
                     weekView.setVisibility(View.VISIBLE);
                 } else if (top >= -monthView.getHeight() * line / lineCount && dy > 0) {
                     weekView.setVisibility(View.INVISIBLE);
+                }
+
+                if(top <= -monthView.getHeight()*(lineCount-1)/lineCount){
+                    //当已经滑动到顶部时 希望周的显示 固定在日历的下方 而不要继续随着手势滑动
+                    weekTxt.layout((int)weekTxt.getX(),monthView.getMeasuredHeight(),
+                            (int)weekTxt.getX()+weekTxt.getWidth(),monthView.getMeasuredHeight()+weekTxt.getHeight());
                 }
             }
 
@@ -98,6 +109,9 @@ public class ScrollLayout extends FrameLayout implements MonthView.OnLineCountCh
     @Override
     public void onLineCountChange(int lineCount) {
         this.lineCount = lineCount;
+        if(lineCount == 6) {
+            weekView.setCount(lineCount);
+        }
     }
 
     @Override
@@ -140,6 +154,7 @@ public class ScrollLayout extends FrameLayout implements MonthView.OnLineCountCh
         super.onFinishInflate();
         mainLayout = (LinearLayout) findViewById(R.id.main_layout);
         monthView = (MonthView) findViewById(R.id.month_calendar);
+        weekTxt = (MyTextView) findViewById(R.id.week_text);
         monthView.setOnLineChooseListener(this);
         monthView.setOnLineCountChangeListener(this);
         monthView.setOnMonthDateClickListener(this);

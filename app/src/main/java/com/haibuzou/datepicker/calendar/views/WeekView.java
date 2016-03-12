@@ -84,6 +84,7 @@ public class WeekView extends View {
 	private float sizeTextGregorian, sizeTextFestival;
 	private float offsetYFestival1, offsetYFestival2;
 	private int num = 5;
+	private int count = 5;
 
 	private boolean isNewEvent, isFestivalDisplay = true,
 			isHolidayDisplay = true, isTodayDisplay = true,
@@ -223,7 +224,7 @@ public class WeekView extends View {
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 		int measureWidth = MeasureSpec.getSize(widthMeasureSpec);
-		setMeasuredDimension(measureWidth, (int) (measureWidth * 6F / 7F) / num);
+		setMeasuredDimension(measureWidth, (int) (measureWidth * 6F / 7F) / count);
 	}
 	
 	  public void moveForwad(){
@@ -237,6 +238,7 @@ public class WeekView extends View {
 	        computeDate();
 	        smoothScrollTo(width * indexMonth, indexYear * height);
 	        lastMoveX = width * indexMonth;
+		    requestLayout();
 	    }
 	    
 	    //滑动back
@@ -251,6 +253,7 @@ public class WeekView extends View {
 	        computeDate();
 	        smoothScrollTo(width * indexMonth, indexYear * height);
 	        lastMoveX = width * indexMonth;
+			requestLayout();
 	    }
 
 	@Override
@@ -390,6 +393,11 @@ public class WeekView extends View {
 
 	public void setLine(int num) {
 		this.num = num;
+	}
+
+	public void setCount(int count){
+		this.count = count;
+		requestLayout();
 	}
 
 	private void draw(Canvas canvas, Rect rect, DPInfo info) {
@@ -668,6 +676,11 @@ public class WeekView extends View {
             tmp = MONTH_REGIONS_6;
         }
 //        for (int i = 0; i < tmp.length; i++) {
+		//5，6行切换导致的下标越界
+		if(num >= tmp.length){
+			num = tmp.length-1;
+		}
+
             for (int j = 0; j < tmp[num].length; j++) {
                 Region region = tmp[0][j];
                 if (TextUtils.isEmpty(mCManager.obtainDPInfo(centerYear, centerMonth)[num][j].strG)) {
