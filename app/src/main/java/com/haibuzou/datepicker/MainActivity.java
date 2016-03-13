@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements MonthView.OnDateC
         weekView.setFestivalDisplay(true);
         weekView.setTodayDisplay(true);
         weekView.setOnDatePickedListener(this);
-        for(int i = 0; i< 3; i++) {
+        for(int i = 0; i< 20; i++) {
             ContentItemViewAbs cia = new ContentItemViewAbs(this);
             contentLayout.addView(cia);
         }
@@ -81,8 +81,10 @@ public class MainActivity extends AppCompatActivity implements MonthView.OnDateC
                 weekTxt.setVisibility(View.VISIBLE);
             }
             contentLayout.removeAllViews();
-            ContentItemViewAbs cia = new ContentItemViewAbs(this);
-            contentLayout.addView(cia);
+            for(int i = 0; i< 2; i++) {
+                ContentItemViewAbs cia = new ContentItemViewAbs(this);
+                contentLayout.addView(cia);
+            }
             Toast.makeText(this, "" + date, Toast.LENGTH_LONG).show();
         } catch (Exception e) {
             e.printStackTrace();

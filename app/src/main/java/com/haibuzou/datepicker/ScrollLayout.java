@@ -58,17 +58,18 @@ public class ScrollLayout extends FrameLayout implements MonthView.OnLineCountCh
                 if (top >= orignalY) {
                     return orignalY;
                 } else {
-                    if (contentLayout.getBottom() <= getHeight()) {
+                    if (contentLayout.getMeasuredHeight() <= monthView.getHeight()*(lineCount-1)/lineCount) {
                         return Math.max(top, -monthView.getHeight() * (lineCount - 1) / lineCount);
                     } else {
-                        return Math.max(top, getHeight() - contentLayout.getMeasuredHeight());
+                        return Math.max(top,  -contentLayout.getMeasuredHeight());
                     }
                 }
             }
 
             @Override
             public void onViewPositionChanged(View changedView, int left, int top, int dx, int dy) {
-                layoutTop = top;
+                //不要让顶部坐标在weekview的上方，这样会导致 mainlayout 被weekview遮挡
+                layoutTop = top <= -monthView.getHeight()*(lineCount-1)/lineCount? -monthView.getHeight()*(lineCount-1)/lineCount : top;
                 if (top <= -monthView.getHeight() * line / lineCount && dy < 0) {
                     weekView.setVisibility(View.VISIBLE);
                 } else if (top >= -monthView.getHeight() * line / lineCount && dy > 0) {
@@ -84,10 +85,10 @@ public class ScrollLayout extends FrameLayout implements MonthView.OnLineCountCh
 
             @Override
             public void onViewReleased(View releasedChild, float xvel, float yvel) {
-                if (yvel >= 0) {
+                if (releasedChild.getTop()> -monthView.getHeight()*(lineCount-1)/lineCount&&yvel >= 0) {
                     viewDragHelper.settleCapturedViewAt(0, orignalY);
                     invalidate();
-                } else {
+                } else if(releasedChild.getTop()> -monthView.getHeight()*(lineCount-1)/lineCount && yvel < 0){
                     viewDragHelper.settleCapturedViewAt(0, -monthView.getHeight() * (lineCount - 1) / lineCount);
                     invalidate();
                 }
@@ -184,6 +185,8 @@ public class ScrollLayout extends FrameLayout implements MonthView.OnLineCountCh
         return true;
     }
 
+
+    //重写 onMeasure 支持 wrap_content
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int widthMode = MeasureSpec.getMode(widthMeasureSpec);
