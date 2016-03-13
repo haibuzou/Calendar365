@@ -92,7 +92,7 @@ public class MonthView extends View {
 
 	private float sizeTextGregorian, sizeTextFestival;
 	private float offsetYFestival1, offsetYFestival2;
-	private int num;
+	private int num = -1;
 	// 记录日历的总行数： 5行，6行
 	private int lineCount;
 	// 点击选中的day
@@ -101,6 +101,7 @@ public class MonthView extends View {
 	private int currentDrawMonth;
 	//自定义一个文本size
 	private int textSize;
+	private int recordLine;
 
 	private boolean isNewEvent, isFestivalDisplay = true,
 			isHolidayDisplay = true, isTodayDisplay = true,
@@ -401,6 +402,7 @@ public class MonthView extends View {
 		}
 		for (int i = 0; i < result.length; i++) {
 			for (int j = 0; j < result[i].length; j++) {
+				recordLine = i;
 				draw(canvas, tmp[i][j].getBounds(), info[i][j]);
 			}
 		}
@@ -426,6 +428,10 @@ public class MonthView extends View {
 		}
 		if (info.isToday && isTodayDisplay) {
 			drawBGToday(canvas, rect);
+			//只在 第一次初始化时 更新week的line 来悬挂当前日期
+			if (null != onLineChooseListener && num == -1) {
+				onLineChooseListener.onLineChange(recordLine);
+			}
 		} else {
 			if (isHolidayDisplay)
 				drawBGHoliday(canvas, rect, info.isHoliday);
