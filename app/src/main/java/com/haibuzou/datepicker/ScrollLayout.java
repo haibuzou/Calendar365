@@ -6,6 +6,7 @@ import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -34,6 +35,8 @@ public class ScrollLayout extends FrameLayout implements MonthView.OnLineCountCh
     private int dragRang;
     private MyTextView weekTxt;
     private int marginTop;
+    private int mTouchSlop;
+    private int lastX;
 
 
     public ScrollLayout(Context context) {
@@ -46,7 +49,8 @@ public class ScrollLayout extends FrameLayout implements MonthView.OnLineCountCh
 
     public ScrollLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        marginTop = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,13,getResources().getDisplayMetrics());
+        mTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
+        marginTop = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 13, getResources().getDisplayMetrics());
         viewDragHelper = ViewDragHelper.create(this, new ViewDragHelper.Callback() {
             @Override
             public boolean tryCaptureView(View child, int pointerId) {
@@ -58,10 +62,10 @@ public class ScrollLayout extends FrameLayout implements MonthView.OnLineCountCh
                 if (top >= orignalY) {
                     return orignalY;
                 } else {
-                    if (contentLayout.getMeasuredHeight() <= monthView.getHeight()*(lineCount-1)/lineCount) {
+                    if (contentLayout.getMeasuredHeight() <= monthView.getHeight() * (lineCount - 1) / lineCount) {
                         return Math.max(top, -monthView.getHeight() * (lineCount - 1) / lineCount);
                     } else {
-                        return Math.max(top,  -contentLayout.getMeasuredHeight());
+                        return Math.max(top, -contentLayout.getMeasuredHeight());
                     }
                 }
             }
@@ -69,26 +73,26 @@ public class ScrollLayout extends FrameLayout implements MonthView.OnLineCountCh
             @Override
             public void onViewPositionChanged(View changedView, int left, int top, int dx, int dy) {
                 //不要让顶部坐标在weekview的上方，这样会导致 mainlayout 被weekview遮挡
-                layoutTop = top <= -monthView.getHeight()*(lineCount-1)/lineCount? -monthView.getHeight()*(lineCount-1)/lineCount : top;
+                layoutTop = top <= -monthView.getHeight() * (lineCount - 1) / lineCount ? -monthView.getHeight() * (lineCount - 1) / lineCount : top;
                 if (top <= -monthView.getHeight() * line / lineCount && dy < 0) {
                     weekView.setVisibility(View.VISIBLE);
                 } else if (top >= -monthView.getHeight() * line / lineCount && dy > 0) {
                     weekView.setVisibility(View.INVISIBLE);
                 }
 
-                if(top <= -monthView.getHeight()*(lineCount-1)/lineCount){
+                if (top <= -monthView.getHeight() * (lineCount - 1) / lineCount) {
                     //当已经滑动到顶部时 希望周的显示 固定在日历的下方 而不要继续随着手势滑动
-                    weekTxt.layout((int)weekTxt.getX(),monthView.getMeasuredHeight(),
-                            (int)weekTxt.getX()+weekTxt.getWidth(),monthView.getMeasuredHeight()+weekTxt.getHeight());
+                    weekTxt.layout((int) weekTxt.getX(), monthView.getMeasuredHeight(),
+                            (int) weekTxt.getX() + weekTxt.getWidth(), monthView.getMeasuredHeight() + weekTxt.getHeight());
                 }
             }
 
             @Override
             public void onViewReleased(View releasedChild, float xvel, float yvel) {
-                if (releasedChild.getTop()> -monthView.getHeight()*(lineCount-1)/lineCount&&yvel >= 0) {
+                if (releasedChild.getTop() > -monthView.getHeight() * (lineCount - 1) / lineCount && yvel >= 0) {
                     viewDragHelper.settleCapturedViewAt(0, orignalY);
                     invalidate();
-                } else if(releasedChild.getTop()> -monthView.getHeight()*(lineCount-1)/lineCount && yvel < 0){
+                } else if (releasedChild.getTop() > -monthView.getHeight() * (lineCount - 1) / lineCount && yvel < 0) {
                     viewDragHelper.settleCapturedViewAt(0, -monthView.getHeight() * (lineCount - 1) / lineCount);
                     invalidate();
                 }
@@ -110,7 +114,7 @@ public class ScrollLayout extends FrameLayout implements MonthView.OnLineCountCh
     @Override
     public void onLineCountChange(int lineCount) {
         this.lineCount = lineCount;
-        if(lineCount == 6) {
+        if (lineCount == 6) {
             weekView.setCount(lineCount);
         }
     }
@@ -176,6 +180,16 @@ public class ScrollLayout extends FrameLayout implements MonthView.OnLineCountCh
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
+        switch (ev.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                lastX = (int) ev.getX();
+                break;
+            case MotionEvent.ACTION_MOVE:
+                if ((int) Math.abs(lastX - ev.getX()) >= mTouchSlop) {
+                    return false;
+                }
+                break;
+        }
         return viewDragHelper.shouldInterceptTouchEvent(ev);
     }
 
@@ -194,16 +208,16 @@ public class ScrollLayout extends FrameLayout implements MonthView.OnLineCountCh
         int heightMode = MeasureSpec.getMode(heightMeasureSpec);
         int heightSize = MeasureSpec.getSize(heightMeasureSpec);
         //计算所有childview的宽高
-        measureChildren(widthMeasureSpec,heightMeasureSpec);
+        measureChildren(widthMeasureSpec, heightMeasureSpec);
         //计算warp_content的时候的高度
         int wrapHeight = 0;
         int count = getChildCount();
-        for(int i = 0; i < count; i++){
+        for (int i = 0; i < count; i++) {
             View child = getChildAt(i);
             int childHeight = child.getMeasuredHeight();
             wrapHeight += childHeight;
         }
-        setMeasuredDimension(widthSize,heightMode==MeasureSpec.EXACTLY?heightSize:wrapHeight);
+        setMeasuredDimension(widthSize, heightMode == MeasureSpec.EXACTLY ? heightSize : wrapHeight);
 
     }
 
