@@ -13,10 +13,10 @@ MonthView.OnDateChangeListener
 ```
 
 ```java
-    @Override
-    public void onDateChange(int year, int month) {
-        // your code  
-    }
+@Override
+public void onDateChange(int year, int month) {
+    // your code  
+}
 ```
 
 点击选择日期的回调
@@ -26,9 +26,9 @@ MonthView.OnDatePickedListener
 
 ```java
 @Override
-    public void onDatePicked(String date) {
-        // your code
-    }
+public void onDatePicked(String date) {
+    // your code
+}
 ```
 返回的日期格式为 yyyy.mm.dd 可以根据需求进行转换
 
