@@ -44,7 +44,7 @@ public abstract class DPCalendar {
      * @return true表示闰年
      */
     public boolean isLeapYear(int year) {
-        return (((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0));
+        return ((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0);
     }
 
     /**
@@ -130,7 +130,7 @@ public abstract class DPCalendar {
         return set;
     }
 
-    protected long GToNum(int year, int month, int day) {
+    protected long gToNum(int year, int month, int day) {
         month = (month + 9) % 12;
         year = year - month / 10;
         return 365 * year + year / 4 - year / 100 + year / 400 + (month * 306 + 5) / 10 + (day - 1);

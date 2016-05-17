@@ -73,8 +73,8 @@ final class SolarTerm {
 
     private static final double[] dts = {-4000, 108371.7, -13036.80, 392.000, 0.0000, -500, 17201.0, -627.82, 16.170, -0.3413, -150, 12200.6, -346.41, 5.403, -0.1593, 150, 9113.8, -328.13, -1.647, 0.0377, 500, 5707.5, -391.41, 0.915, 0.3145, 900, 2203.4, -283.45, 13.034, -0.1778, 1300, 490.1, -57.35, 2.085, -0.0072, 1600, 120.0, -9.81, -1.532, 0.1403, 1700, 10.2, -0.91, 0.510, -0.0370, 1800, 13.4, -0.72, 0.202, -0.0193, 1830, 7.8, -1.81, 0.416, -0.0247, 1860, 8.3, -0.13, -0.406, 0.0292, 1880, -5.4, 0.32, -0.183, 0.0173, 1900, -2.3, 2.06, 0.169, -0.0135, 1920, 21.2, 1.69, -0.304, 0.0167, 1940, 24.2, 1.22, -0.064, 0.0031, 1960, 33.2, 0.51, 0.231, -0.0109, 1980, 51.0, 1.29, -0.026, 0.0032, 2000, 64.7, -1.66, 5.224, -0.2905, 2150, 279.4, 732.95, 429.579, 0.0158, 6000};
 
-    private double EnnT = 0;
-    private double MnnT = 0;
+    private double enNT = 0;
+    private double mnNT = 0;
 
     private double D = 1;
 
@@ -95,7 +95,7 @@ final class SolarTerm {
         double jd = 365.2422 * (year - 2000), q;
         int j;
         for (int i = 0; i < tmp.length; i++) {
-            j = (i - 5);
+            j = i - 5;
             q = angleCal(jd + j * 15.2, j * 15, 0);
             q = q + J2000 + (double) 8 / 24;
             setFromJD(q, true);
@@ -197,12 +197,12 @@ final class SolarTerm {
     }
 
     private double[] moonCal(double jd) {
-        MnnT = jd / 36525;
-        double t1 = MnnT, t2 = t1 * t1, t3 = t2 * t1, t4 = t3 * t1;
+        mnNT = jd / 36525;
+        double t1 = mnNT, t2 = t1 * t1, t3 = t2 * t1, t4 = t3 * t1;
         double[] llr = new double[3];
-        llr[0] = (Mnn(M10) + Mnn(M11) * t1 + Mnn(M12) * t2) / rad;
-        llr[1] = (Mnn(M20) + Mnn(M21) * t1) / rad;
-        llr[2] = (Mnn(M30) + Mnn(M31) * t1) * 0.999999949827;
+        llr[0] = (mnn(M10) + mnn(M11) * t1 + mnn(M12) * t2) / rad;
+        llr[1] = (mnn(M20) + mnn(M21) * t1) / rad;
+        llr[2] = (mnn(M30) + mnn(M31) * t1) * 0.999999949827;
         llr[0] = llr[0] + M1n[0] + M1n[1] * t1 + M1n[2] * t2 + M1n[3] * t3 + M1n[4] * t4;
         llr[0] = rad2mrad(llr[0]);
         addPrece(jd, llr);
@@ -219,8 +219,8 @@ final class SolarTerm {
         zb[0] = rad2mrad(zb[0] + (v + 2.9965 * t1) / rad);
     }
 
-    private double Mnn(double[] F) {
-        double v = 0, t1 = MnnT, t2 = t1 * t1, t3 = t2 * t1, t4 = t3 * t1;
+    private double mnn(double[] F) {
+        double v = 0, t1 = mnNT, t2 = t1 * t1, t3 = t2 * t1, t4 = t3 * t1;
         for (int i = 0; i < F.length; i += 6)
             v += F[i] * Math.sin(F[i + 1] + t1 * F[i + 2] + t2 * F[i + 3] + t3 * F[i + 4] + t4 * F[i + 5]);
         return v;
@@ -257,12 +257,12 @@ final class SolarTerm {
     }
 
     private double[] earCal(double jd) {
-        EnnT = jd / 365250;
+        enNT = jd / 365250;
         double llr[] = new double[3];
-        double t1 = EnnT, t2 = t1 * t1, t3 = t2 * t1, t4 = t3 * t1, t5 = t4 * t1;
-        llr[0] = Enn(E10) + Enn(E11) * t1 + Enn(E12) * t2 + Enn(E13) * t3 + Enn(E14) * t4 + Enn(E15) * t5;
-        llr[1] = Enn(E20) + Enn(E21) * t1;
-        llr[2] = Enn(E30) + Enn(E31) * t1 + Enn(E32) * t2 + Enn(E33) * t3;
+        double t1 = enNT, t2 = t1 * t1, t3 = t2 * t1, t4 = t3 * t1, t5 = t4 * t1;
+        llr[0] = enn(E10) + enn(E11) * t1 + enn(E12) * t2 + enn(E13) * t3 + enn(E14) * t4 + enn(E15) * t5;
+        llr[1] = enn(E20) + enn(E21) * t1;
+        llr[2] = enn(E30) + enn(E31) * t1 + enn(E32) * t2 + enn(E33) * t3;
         llr[0] = rad2mrad(llr[0]);
         return llr;
     }
@@ -274,10 +274,10 @@ final class SolarTerm {
         return v;
     }
 
-    private double Enn(double[] F) {
+    private double enn(double[] F) {
         double v = 0;
         for (int i = 0; i < F.length; i += 3)
-            v += F[i] * Math.cos(F[i + 1] + EnnT * F[i + 2]);
+            v += F[i] * Math.cos(F[i + 1] + enNT * F[i + 2]);
         return v;
     }
 }

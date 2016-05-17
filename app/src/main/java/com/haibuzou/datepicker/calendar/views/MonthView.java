@@ -44,15 +44,15 @@ import java.util.Map;
  * @author AigeStudio 2015-06-29
  */
 public class MonthView extends View {
-	private final Region[][] MONTH_REGIONS_4 = new Region[4][7];
-	private final Region[][] MONTH_REGIONS_5 = new Region[5][7];
-	private final Region[][] MONTH_REGIONS_6 = new Region[6][7];
+	private final Region[][] monthRegionsFour = new Region[4][7];
+	private final Region[][] monthRegionsFive = new Region[5][7];
+	private final Region[][] monthRegionsSix = new Region[6][7];
 
-	private final DPInfo[][] INFO_4 = new DPInfo[4][7];
-	private final DPInfo[][] INFO_5 = new DPInfo[5][7];
-	private final DPInfo[][] INFO_6 = new DPInfo[6][7];
+	private final DPInfo[][] infoFour = new DPInfo[4][7];
+	private final DPInfo[][] infoFive = new DPInfo[5][7];
+	private final DPInfo[][] infoSix = new DPInfo[6][7];
 
-	private final Map<String, List<Region>> REGION_SELECTED = new HashMap<>();
+	private final Map<String, List<Region>> regionSelected = new HashMap<>();
 
 	private DPCManager mCManager = DPCManager.getInstance();
 	private DPTManager mTManager = DPTManager.getInstance();
@@ -312,28 +312,28 @@ public class MonthView extends View {
 				+ heightFestival / 2F + heightGregorian / 2F) / 2F;
 		offsetYFestival2 = offsetYFestival1 * 2F;
 
-		for (int i = 0; i < MONTH_REGIONS_4.length; i++) {
-			for (int j = 0; j < MONTH_REGIONS_4[i].length; j++) {
+		for (int i = 0; i < monthRegionsFour.length; i++) {
+			for (int j = 0; j < monthRegionsFour[i].length; j++) {
 				Region region = new Region();
-				region.set((j * cellW), (i * cellH4), cellW + (j * cellW),
+				region.set(j * cellW, i * cellH4, cellW + (j * cellW),
 						cellW + (i * cellH4));
-				MONTH_REGIONS_4[i][j] = region;
+				monthRegionsFour[i][j] = region;
 			}
 		}
-		for (int i = 0; i < MONTH_REGIONS_5.length; i++) {
-			for (int j = 0; j < MONTH_REGIONS_5[i].length; j++) {
+		for (int i = 0; i < monthRegionsFive.length; i++) {
+			for (int j = 0; j < monthRegionsFive[i].length; j++) {
 				Region region = new Region();
-				region.set((j * cellW), (i * cellH5), cellW + (j * cellW),
+				region.set(j * cellW, i * cellH5, cellW + (j * cellW),
 						cellW + (i * cellH5));
-				MONTH_REGIONS_5[i][j] = region;
+				monthRegionsFive[i][j] = region;
 			}
 		}
-		for (int i = 0; i < MONTH_REGIONS_6.length; i++) {
-			for (int j = 0; j < MONTH_REGIONS_6[i].length; j++) {
+		for (int i = 0; i < monthRegionsSix.length; i++) {
+			for (int j = 0; j < monthRegionsSix[i].length; j++) {
 				Region region = new Region();
 				region.set((j * cellW), (i * cellH6), cellW + (j * cellW),
 						cellW + (i * cellH6));
-				MONTH_REGIONS_6[i][j] = region;
+				monthRegionsSix[i][j] = region;
 			}
 		}
 	}
@@ -388,17 +388,17 @@ public class MonthView extends View {
 		DPInfo[][] result;
 		Region[][] tmp;
 		if (TextUtils.isEmpty(info[4][0].strG)) {
-			tmp = MONTH_REGIONS_4;
-			arrayClear(INFO_4);
-			result = arrayCopy(info, INFO_4);
+			tmp = monthRegionsFour;
+			arrayClear(infoFour);
+			result = arrayCopy(info, infoFour);
 		} else if (TextUtils.isEmpty(info[5][0].strG)) {
-			tmp = MONTH_REGIONS_5;
-			arrayClear(INFO_5);
-			result = arrayCopy(info, INFO_5);
+			tmp = monthRegionsFive;
+			arrayClear(infoFive);
+			result = arrayCopy(info, infoFive);
 		} else {
-			tmp = MONTH_REGIONS_6;
-			arrayClear(INFO_6);
-			result = arrayCopy(info, INFO_6);
+			tmp = monthRegionsSix;
+			arrayClear(infoSix);
+			result = arrayCopy(info, infoSix);
 		}
 		for (int i = 0; i < result.length; i++) {
 			for (int j = 0; j < result[i].length; j++) {
@@ -680,8 +680,8 @@ public class MonthView extends View {
 
 	private void buildRegion() {
 		String key = indexYear + ":" + indexMonth;
-		if (!REGION_SELECTED.containsKey(key)) {
-			REGION_SELECTED.put(key, new ArrayList<Region>());
+		if (!regionSelected.containsKey(key)) {
+			regionSelected.put(key, new ArrayList<Region>());
 		}
 	}
 
@@ -703,11 +703,11 @@ public class MonthView extends View {
 		DPInfo[][] info = mCManager.obtainDPInfo(centerYear, centerMonth);
 		Region[][] tmp;
 		if (TextUtils.isEmpty(info[4][0].strG)) {
-			tmp = MONTH_REGIONS_4;
+			tmp = monthRegionsFour;
 		} else if (TextUtils.isEmpty(info[5][0].strG)) {
-			tmp = MONTH_REGIONS_5;
+			tmp = monthRegionsFive;
 		} else {
-			tmp = MONTH_REGIONS_6;
+			tmp = monthRegionsSix;
 		}
 		for (int i = 0; i < tmp.length; i++) {
 			for (int j = 0; j < tmp[i].length; j++) {
@@ -717,7 +717,7 @@ public class MonthView extends View {
 					continue;
 				}
 				if (region.contains(x, y)) {
-					List<Region> regions = REGION_SELECTED.get(indexYear + ":"
+					List<Region> regions = regionSelected.get(indexYear + ":"
 							+ indexMonth);
 					if (mDPMode == DPMode.SINGLE) {
 						cirApr.clear();
@@ -873,11 +873,11 @@ public class MonthView extends View {
 		DPInfo[][] info = mCManager.obtainDPInfo(centerYear, centerMonth);
 		Region[][] tmp;
 		if (TextUtils.isEmpty(info[4][0].strG)) {
-			tmp = MONTH_REGIONS_4;
+			tmp = monthRegionsFour;
 		} else if (TextUtils.isEmpty(info[5][0].strG)) {
-			tmp = MONTH_REGIONS_5;
+			tmp = monthRegionsFive;
 		} else {
-			tmp = MONTH_REGIONS_6;
+			tmp = monthRegionsSix;
 		}
 		for (int i = 0; i < tmp.length; i++) {
 			for (int j = 0; j < tmp[i].length; j++) {
@@ -887,7 +887,7 @@ public class MonthView extends View {
 					continue;
 				}
 				if (region.contains(x, y)) {
-					List<Region> regions = REGION_SELECTED.get(indexYear + ":"
+					List<Region> regions = regionSelected.get(indexYear + ":"
 							+ indexMonth);
 					if (mDPMode == DPMode.SINGLE) {
 						cirApr.clear();
