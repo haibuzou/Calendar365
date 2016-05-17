@@ -123,11 +123,9 @@ final class SolarTerm {
         this.D = D - int2(m * 30.6001);
         y -= 4716;
         m--;
-        if (m > 12)
+        if (m > 12){
             m -= 12;
-        if (m <= 2)
-            //noinspection UnusedAssignment
-            y++;
+        }
     }
 
     private double int2(double v) {

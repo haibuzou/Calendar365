@@ -203,7 +203,6 @@ public class ScrollLayout extends FrameLayout implements MonthView.OnLineCountCh
     //重写 onMeasure 支持 wrap_content
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int widthMode = MeasureSpec.getMode(widthMeasureSpec);
         int widthSize = MeasureSpec.getSize(widthMeasureSpec);
         int heightMode = MeasureSpec.getMode(heightMeasureSpec);
         int heightSize = MeasureSpec.getSize(heightMeasureSpec);

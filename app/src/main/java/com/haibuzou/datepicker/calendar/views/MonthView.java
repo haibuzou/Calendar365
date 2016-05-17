@@ -358,13 +358,15 @@ public class MonthView extends View {
 
 	private void drawBGCircle(Canvas canvas) {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-			for (String s : cirDpr.keySet()) {
-				BGCircle circle = cirDpr.get(s);
+			for (Map.Entry<String,BGCircle> entry: cirDpr.entrySet()) {
+				String key=entry.getKey();
+				BGCircle circle = entry.getValue();
 				drawBGCircle(canvas, circle);
 			}
 		}
-		for (String s : cirApr.keySet()) {
-			BGCircle circle = cirApr.get(s);
+		for (Map.Entry<String,BGCircle> entry: cirDpr.entrySet()) {
+			String key=entry.getKey();
+			BGCircle circle = entry.getValue();
 			drawBGCircle(canvas, circle);
 		}
 	}
