@@ -76,7 +76,7 @@ public abstract class DPCalendar {
      */
     public String[][] buildMonthG(int year, int month) {
         c.clear();
-        String tmp[][] = new String[6][7];
+        String[][] tmp = new String[6][7];
         c.set(year, month - 1, 1);
 
         int daysInMonth = 0;
