@@ -77,21 +77,35 @@ public class MonthView extends View {
 	private DPDecor mDPDecor;
 
 	private int circleRadius;
-	private int indexYear, indexMonth;
-	private int centerYear, centerMonth;
-	private int leftYear, leftMonth;
-	private int rightYear, rightMonth;
+	private int indexYear;
+	private int indexMonth;
+	private int centerYear;
+	private int centerMonth;
+	private int leftYear;
+	private int leftMonth;
+	private int rightYear;
+	private int rightMonth;
 	// private int topYear, topMonth;
 	// private int bottomYear, bottomMonth;
-	private int width, height;
-	private int sizeDecor, sizeDecor2x, sizeDecor3x;
-	private int lastPointX, lastPointY;
-	private int lastMoveX, lastMoveY;
-	private int criticalWidth, criticalHeight;
-	private int animZoomOut1, animZoomIn1, animZoomOut2;
+	private int width;
+	private int height;
+	private int sizeDecor;
+	private int sizeDecor2x;
+	private int sizeDecor3x;
+	private int lastPointX;
+	private int lastPointY;
+	private int lastMoveX;
+	private int lastMoveY;
+	private int criticalWidth;
+	private int criticalHeight;
+	private int animZoomOut1;
+	private int animZoomIn1;
+	private int animZoomOut2;
 
-	private float sizeTextGregorian, sizeTextFestival;
-	private float offsetYFestival1, offsetYFestival2;
+	private float sizeTextGregorian;
+	private float sizeTextFestival;
+	private float offsetYFestival1;
+	private float offsetYFestival2;
 	private int num = -1;
 	// 记录日历的总行数： 5行，6行
 	private int lineCount;
@@ -103,9 +117,11 @@ public class MonthView extends View {
 	private int textSize;
 	private int recordLine;
 
-	private boolean isNewEvent, isFestivalDisplay = true,
-			isHolidayDisplay = true, isTodayDisplay = true,
-			isDeferredDisplay = true;
+	private boolean isNewEvent;
+	private boolean isFestivalDisplay = true;
+	private boolean isHolidayDisplay = true;
+	private boolean isTodayDisplay = true;
+	private boolean	isDeferredDisplay = true;
 
 	private Map<String, BGCircle> cirApr = new HashMap<>();
 	private Map<String, BGCircle> cirDpr = new HashMap<>();
@@ -981,7 +997,8 @@ public class MonthView extends View {
 	}
 
 	private class BGCircle {
-		private float x, y;
+		private float x;
+		private float y;
 		private int radius;
 
 		private ShapeDrawable shape;

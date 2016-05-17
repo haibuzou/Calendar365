@@ -9,11 +9,19 @@ package com.haibuzou.datepicker.calendar.entities;
  * @author AigeStudio 2015-03-26
  */
 public class DPInfo {
-    public String strG, strF;
+    public String strG;
+    public String strF;
     public boolean isHoliday;
     public boolean isChoosed;
-    public boolean isToday, isWeekend;
-    public boolean isSolarTerms, isFestival, isDeferred;
+    public boolean isToday;
+    public boolean  isWeekend;
+    public boolean isSolarTerms;
+    public boolean isFestival;
+    public boolean isDeferred;
     public boolean isDecorBG;
-    public boolean isDecorTL, isDecorT, isDecorTR, isDecorL, isDecorR;
+    public boolean isDecorTL;
+    public boolean isDecorT;
+    public boolean isDecorTR;
+    public boolean isDecorL;
+    public boolean isDecorR;
 }
