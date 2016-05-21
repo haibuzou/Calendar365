@@ -8,6 +8,7 @@ package com.haibuzou.datepicker.calendar.utils;
  * @author AigeStudio 2015-07-22
  */
 public final class DataUtils {
+    private DataUtils(){}
     /**
      * 一维数组转换为二维数组
      *
