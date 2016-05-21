@@ -105,11 +105,12 @@ final class SolarTerm {
     }
 
     private void setFromJD(double jd, boolean UTC) {
+        double jdLocal=0.0;
         if (UTC)
-            jd -= this.deltaT2(jd - J2000);
-        jd += 0.5;
+            jdLocal -= this.deltaT2(jd - J2000);
+        jdLocal = jd + 0.5;
 
-        double A = int2(jd);
+        double A = int2(jdLocal);
         double D;
 
         if (A > 2299161) {
@@ -131,10 +132,10 @@ final class SolarTerm {
     }
 
     private double int2(double v) {
-        v = Math.floor(v);
-        if (v < 0)
-            return v + 1;
-        return v;
+       double v1 = Math.floor(v);
+        if (v1 < 0)
+            return v1 + 1;
+        return v1;
     }
 
     private double deltaT2(double jd) {
@@ -158,9 +159,9 @@ final class SolarTerm {
             t2 += 360;
         else
             t2 += 25;
-        jiao *= Math.PI / 180;
-        double v1 = jiaoCai(lx, t1, jiao);
-        double v2 = jiaoCai(lx, t2, jiao);
+        double jiao1 = jiao*Math.PI / 180;
+        double v1 = jiaoCai(lx, t1, jiao1);
+        double v2 = jiaoCai(lx, t2, jiao1);
         if (v1 < v2)
             v2 -= 2 * Math.PI;
         double k = 1, k2;
@@ -169,7 +170,7 @@ final class SolarTerm {
             if (Math.abs(k2) > 1e-15)
                 k = k2;
             t = t1 - v1 / k;
-            v = jiaoCai(lx, t, jiao);
+            v = jiaoCai(lx, t, jiao1);
             if (v > 1)
                 v -= 2 * Math.PI;
             if (Math.abs(v) < 1e-8)
@@ -230,8 +231,8 @@ final class SolarTerm {
         ZD d = new ZD();
         d.Lon = 0;
         d.Obl = 0;
-        t /= 36525;
-        double c, t1 = t, t2 = t1 * t1, t3 = t2 * t1, t4 = t3 * t1;
+        double tLocal= t / 36525;
+        double c, t1 = tLocal, t2 = t1 * t1, t3 = t2 * t1, t4 = t3 * t1;
         for (int i = 0; i < nutB.length; i += 9) {
             c = nutB[i] + nutB[i + 1] * t1 + nutB[i + 2] * t2 + nutB[i + 3] * t3 + nutB[i + 4] * t4;
             d.Lon += (nutB[i + 5] + nutB[i + 6] * t / 10) * Math.sin(c);
@@ -268,10 +269,10 @@ final class SolarTerm {
     }
 
     private double rad2mrad(double v) {
-        v = v % (2 * Math.PI);
-        if (v < 0)
-            return v + 2 * Math.PI;
-        return v;
+        double v1 = v % (2 * Math.PI);
+        if (v1 < 0)
+            return v1 + 2 * Math.PI;
+        return v1;
     }
 
     private double Enn(double[] F) {

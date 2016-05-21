@@ -131,9 +131,9 @@ public abstract class DPCalendar {
     }
 
     protected long GToNum(int year, int month, int day) {
-        month = (month + 9) % 12;
-        year = year - month / 10;
-        return 365 * year + year / 4 - year / 100 + year / 400 + (month * 306 + 5) / 10 + (day - 1);
+        int monthLocal = (month + 9) % 12;
+        int yearLocal = year - month / 10;
+        return 365 * yearLocal + yearLocal / 4 - yearLocal / 100 + yearLocal / 400 + (monthLocal * 306 + 5) / 10 + (day - 1);
     }
 
     protected int getBitInt(int data, int length, int shift) {
