@@ -92,7 +92,8 @@ final class SolarTerm {
      */
     String[][] buildSolarTerm(int year) {
         String[] tmp = new String[24];
-        double jd = 365.2422 * (year - 2000), q;
+        double jd = 365.2422 * (year - 2000);
+        double q;
         int j;
         for (int i = 0; i < tmp.length; i++) {
             j = (i - 5);
@@ -153,7 +154,9 @@ final class SolarTerm {
     }
 
     private double angleCal(double t1, double jiao, int lx) {
-        double t2 = t1, t = 0, v;
+        double t2 = t1;
+        double t = 0;
+        double v;
         if (lx == 0)
             t2 += 360;
         else
@@ -163,7 +166,8 @@ final class SolarTerm {
         double v2 = jiaoCai(lx, t2, jiao);
         if (v1 < v2)
             v2 -= 2 * Math.PI;
-        double k = 1, k2;
+        double k = 1;
+        double k2;
         for (int i = 0; i < 10; i++) {
             k2 = (v2 - v1) / (t2 - t1);
             if (Math.abs(k2) > 1e-15)
@@ -198,7 +202,10 @@ final class SolarTerm {
 
     private double[] moonCal(double jd) {
         MnnT = jd / 36525;
-        double t1 = MnnT, t2 = t1 * t1, t3 = t2 * t1, t4 = t3 * t1;
+        double t1 = MnnT;
+        double t2 = t1 * t1;
+        double t3 = t2 * t1;
+        double t4 = t3 * t1;
         double[] llr = new double[3];
         llr[0] = (Mnn(M10) + Mnn(M11) * t1 + Mnn(M12) * t2) / rad;
         llr[1] = (Mnn(M20) + Mnn(M21) * t1) / rad;
@@ -211,7 +218,9 @@ final class SolarTerm {
 
     private void addPrece(double jd, double[] zb) {
         int i;
-        double t = 1, v = 0, t1 = jd / 365250;
+        double t = 1;
+        double v = 0;
+        double t1 = jd / 365250;
         for (i = 1; i < 8; i++) {
             t *= t1;
             v += preceB[i] * t;
@@ -220,7 +229,11 @@ final class SolarTerm {
     }
 
     private double Mnn(double[] F) {
-        double v = 0, t1 = MnnT, t2 = t1 * t1, t3 = t2 * t1, t4 = t3 * t1;
+        double v = 0;
+        double t1 = MnnT;
+        double t2 = t1 * t1;
+        double t3 = t2 * t1;
+        double t4 = t3 * t1;
         for (int i = 0; i < F.length; i += 6)
             v += F[i] * Math.sin(F[i + 1] + t1 * F[i + 2] + t2 * F[i + 3] + t3 * F[i + 4] + t4 * F[i + 5]);
         return v;
@@ -231,7 +244,11 @@ final class SolarTerm {
         d.Lon = 0;
         d.Obl = 0;
         t /= 36525;
-        double c, t1 = t, t2 = t1 * t1, t3 = t2 * t1, t4 = t3 * t1;
+        double c;
+        double t1 = t;
+        double t2 = t1 * t1;
+        double t3 = t2 * t1;
+        double t4 = t3 * t1;
         for (int i = 0; i < nutB.length; i += 9) {
             c = nutB[i] + nutB[i + 1] * t1 + nutB[i + 2] * t2 + nutB[i + 3] * t3 + nutB[i + 4] * t4;
             d.Lon += (nutB[i + 5] + nutB[i + 6] * t / 10) * Math.sin(c);
@@ -250,7 +267,8 @@ final class SolarTerm {
         double L = GXC_l[0] + GXC_l[1] * t1 + GXC_l[2] * t2 + GXC_l[3] * t3 + GXC_l[4] * t4;
         double p = GXC_p[0] + GXC_p[1] * t1 + GXC_p[2] * t2;
         double e = GXC_e[0] + GXC_e[1] * t1 + GXC_e[2] * t2;
-        double dL = L - zb[0], dP = p - zb[0];
+        double dL = L - zb[0];
+        double dP = p - zb[0];
         zb[0] -= GXC_k * (Math.cos(dL) - e * Math.cos(dP)) / Math.cos(zb[1]);
         zb[1] -= GXC_k * Math.sin(zb[1]) * (Math.sin(dL) - e * Math.sin(dP));
         zb[0] = rad2mrad(zb[0]);
@@ -259,7 +277,11 @@ final class SolarTerm {
     private double[] earCal(double jd) {
         EnnT = jd / 365250;
         double llr[] = new double[3];
-        double t1 = EnnT, t2 = t1 * t1, t3 = t2 * t1, t4 = t3 * t1, t5 = t4 * t1;
+        double t1 = EnnT;
+        double t2 = t1 * t1;
+        double t3 = t2 * t1;
+        double t4 = t3 * t1;
+        double t5 = t4 * t1;
         llr[0] = Enn(E10) + Enn(E11) * t1 + Enn(E12) * t2 + Enn(E13) * t3 + Enn(E14) * t4 + Enn(E15) * t5;
         llr[1] = Enn(E20) + Enn(E21) * t1;
         llr[2] = Enn(E30) + Enn(E31) * t1 + Enn(E32) * t2 + Enn(E33) * t3;
