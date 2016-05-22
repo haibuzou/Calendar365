@@ -82,7 +82,7 @@ public class DPCNCalendar extends DPCalendar {
 
     private static final String[][] DEFERRED = {{"4"}, {"15", "16", "17", "25", "26", "27", "28"}, {""}, {""}, {""}, {""}, {""}, {""}, {"6", "28", "29", "30"}, {"8", "9", "10"}, {""}, {""}};
 
-    private static final String SOLAR_TERM[][] = {{"小寒", "大寒"}, {"立春", "雨水"}, {"惊蛰", "春分"}, {"清明", "谷雨"}, {"立夏", "小满"}, {"芒种", "夏至"}, {"小暑", "大暑"}, {"立秋", "处暑"}, {"白露", "秋分"}, {"寒露", "霜降"}, {"立冬", "小雪"}, {"大雪", "冬至"}};
+    private static final String[][] SOLAR_TERM = {{"小寒", "大寒"}, {"立春", "雨水"}, {"惊蛰", "春分"}, {"清明", "谷雨"}, {"立夏", "小满"}, {"芒种", "夏至"}, {"小暑", "大暑"}, {"立秋", "处暑"}, {"白露", "秋分"}, {"寒露", "霜降"}, {"立冬", "小雪"}, {"大雪", "冬至"}};
 
     private final HashMap<Integer, String[][]> cacheSolarTerm = new HashMap<>();
 
@@ -119,7 +119,7 @@ public class DPCNCalendar extends DPCalendar {
     private String[][] buildMonthL(int year, int month) {
         String[][] gregorianMonth = buildMonthG(year, month);
         G g = new G();
-        String tmp[][] = new String[6][7];
+        String[][] tmp = new String[6][7];
         for (int i = 0; i < tmp.length; i++) {
             for (int j = 0; j < tmp[0].length; j++) {
                 tmp[i][j] = "";
