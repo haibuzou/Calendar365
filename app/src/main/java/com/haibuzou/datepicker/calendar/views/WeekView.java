@@ -334,15 +334,13 @@ public class WeekView extends View {
 
 	private void drawBGCircle(Canvas canvas) {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-			for (Map.Entry<String,BGCircle> entry: cirDpr.entrySet()) {
-				String key=entry.getKey();
-				BGCircle circle = entry.getValue();
+			for (String s : cirDpr.keySet()) {
+				BGCircle circle = cirDpr.get(s);
 				drawBGCircle(canvas, circle);
 			}
 		}
-		for (Map.Entry<String,BGCircle> entry: cirDpr.entrySet()) {
-			String key=entry.getKey();
-			BGCircle circle = entry.getValue();
+		for (String s : cirApr.keySet()) {
+			BGCircle circle = cirApr.get(s);
 			drawBGCircle(canvas, circle);
 		}
 	}
