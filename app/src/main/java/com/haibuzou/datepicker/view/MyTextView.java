@@ -32,7 +32,7 @@ public class MyTextView extends TextView {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        canvas.drawRoundRect(rect,30,30,mPaint);
+        canvas.drawRoundRect(rect,10,10,mPaint);
         super.onDraw(canvas);
     }
 
