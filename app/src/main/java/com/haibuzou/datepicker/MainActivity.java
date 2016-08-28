@@ -36,7 +36,6 @@ public class MainActivity extends AppCompatActivity implements MonthView.OnDateC
         toolbar.setTitle(now.get(Calendar.YEAR) + "." + (now.get(Calendar.MONTH) + 1));
         setSupportActionBar(toolbar);
 
-
         monthView = (MonthView) findViewById(R.id.month_calendar);
         weekView = (WeekView) findViewById(R.id.week_calendar);
         contentLayout = (LinearLayout) findViewById(R.id.content_layout);
