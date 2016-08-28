@@ -3,8 +3,8 @@
 日历部分的实现采用的是aige的DatePicker，感谢aige的日历控件
 ##1.0
 顶部的悬挂效果采用比较简单的通过位置来判断 week的显示和消失来实现
-整体的滑动效果使用ViewDragHelper来实现，由于这种类似嵌套的滑动收拾处理，
-底部的UI变化是通过addview的方式来进行动态改变。
+整体的滑动效果使用ViewDragHelper来实现。
+底部的UI变化是通过removeView和addview的方式来进行动态改变。
 
 ##关于日期回调
 左右滑动切换日期变化的回调方法

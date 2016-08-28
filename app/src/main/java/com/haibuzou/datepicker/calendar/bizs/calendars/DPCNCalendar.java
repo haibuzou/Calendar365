@@ -82,9 +82,9 @@ public class DPCNCalendar extends DPCalendar {
 
     private static final String[][] DEFERRED = {{"4"}, {"15", "16", "17", "25", "26", "27", "28"}, {""}, {""}, {""}, {""}, {""}, {""}, {"6", "28", "29", "30"}, {"8", "9", "10"}, {""}, {""}};
 
-    private static final String SOLAR_TERM[][] = {{"小寒", "大寒"}, {"立春", "雨水"}, {"惊蛰", "春分"}, {"清明", "谷雨"}, {"立夏", "小满"}, {"芒种", "夏至"}, {"小暑", "大暑"}, {"立秋", "处暑"}, {"白露", "秋分"}, {"寒露", "霜降"}, {"立冬", "小雪"}, {"大雪", "冬至"}};
+    private static final String[][] SOLAR_TERM = {{"小寒", "大寒"}, {"立春", "雨水"}, {"惊蛰", "春分"}, {"清明", "谷雨"}, {"立夏", "小满"}, {"芒种", "夏至"}, {"小暑", "大暑"}, {"立秋", "处暑"}, {"白露", "秋分"}, {"寒露", "霜降"}, {"立冬", "小雪"}, {"大雪", "冬至"}};
 
-    private final HashMap<Integer, String[][]> CACHE_SOLAR_TERM = new HashMap<>();
+    private final HashMap<Integer, String[][]> cacheSolarTerm = new HashMap<>();
 
     private SolarTerm mSolarTerm = new SolarTerm();
 
@@ -119,7 +119,7 @@ public class DPCNCalendar extends DPCalendar {
     private String[][] buildMonthL(int year, int month) {
         String[][] gregorianMonth = buildMonthG(year, month);
         G g = new G();
-        String tmp[][] = new String[6][7];
+        String[][] tmp = new String[6][7];
         for (int i = 0; i < tmp.length; i++) {
             for (int j = 0; j < tmp[0].length; j++) {
                 tmp[i][j] = "";
@@ -130,7 +130,7 @@ public class DPCNCalendar extends DPCalendar {
                     L l = null;
                     String result = "";
                     if (year >= 1900 && year <= 2100) {
-                        l = GTL(g);
+                        l = gtl(g);
                         result = getFestivalL(l.m, l.d);
                     }
                     if (TextUtils.isEmpty(result)) {
@@ -186,10 +186,10 @@ public class DPCNCalendar extends DPCalendar {
     }
 
     private String getSolarTerm(int year, int month, int day) {
-        String[][] tmp = CACHE_SOLAR_TERM.get(year);
+        String[][] tmp = cacheSolarTerm.get(year);
         if (null == tmp) {
             tmp = mSolarTerm.buildSolarTerm(year);
-            CACHE_SOLAR_TERM.put(year, tmp);
+            cacheSolarTerm.put(year, tmp);
         }
         String[] STOfMonth = tmp[month - 1];
         if (Integer.valueOf(STOfMonth[0]) == day) {
@@ -222,7 +222,7 @@ public class DPCNCalendar extends DPCalendar {
         return tmp;
     }
 
-    private L GTL(G g) {
+    private L gtl(G g) {
         int index = g.y - DAYS_AND_LEAP_MONTH_OF_LUNAR[0];
         int data = (g.y << 9) | (g.m << 5) | (g.d);
         int lunarFirstDayInGregorian;
@@ -235,7 +235,7 @@ public class DPCNCalendar extends DPCalendar {
         int m = getBitInt(lunarFirstDayInGregorian, 4, 5);
         int d = getBitInt(lunarFirstDayInGregorian, 5, 0);
 
-        long offset = GToNum(g.y, g.m, g.d) - GToNum(y, m, d);
+        long offset = gToNum(g.y, g.m, g.d) - gToNum(y, m, d);
         int days = FIRST_DAY_OF_LUNAR_IN_GREGORIAN[index];
         int leap = getBitInt(days, 4, 13);
 
